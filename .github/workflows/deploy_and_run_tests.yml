@@ -13,14 +13,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-        BASEURL: ${{ secrets.BASEURL }}
+      BASEURL: ${{ secrets.BASEURL }}  # Set your environment URL as secret
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3  # Updated version
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3  # Updated version
       with:
         python-version: '3.x'
 
@@ -30,9 +30,29 @@ jobs:
         source .venv/bin/activate
         pip install -r requirements.txt
 
-    - name: Wait for Render deployment to complete (5 minutes)
-      run: sleep 300  # 5 minutes (300 seconds)
+    - name: Verify Python version
+      run: python --version
+
+    - name: Verify pip and installed packages
+      run: |
+        pip --version
+        pip list
+
+    - name: Verify virtual environment
+      run: |
+        source .venv/bin/activate
+        which python
+        which pip
+
+    - name: Check if pytest is installed
+      run: |
+        source .venv/bin/activate
+        pytest --version
+
+    - name: Wait for Render deployment to complete (2 minutes)
+      run: sleep 120
 
     - name: Run Selenium tests
       run: |
+        source .venv/bin/activate
         pytest tests/selenium_script.py --maxfail=1 --disable-warnings -v
