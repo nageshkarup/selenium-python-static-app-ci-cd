@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import pytest
 
 
-BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000/static")
 
 # Define locators
 LOCATORS = {
@@ -32,7 +32,7 @@ def wait_for_element(driver, locator, timeout=10):
 
 # Sign-up method
 def sign_up(driver, name, email, password):
-    driver.get(f"{BASE_URL}/static/index.html")
+    driver.get(f"{BASE_URL}/index.html")
     wait_for_element(driver, LOCATORS["name"]).send_keys(name)
     wait_for_element(driver, LOCATORS["email"]).send_keys(email)
     wait_for_element(driver, LOCATORS["password"]).send_keys(password)
