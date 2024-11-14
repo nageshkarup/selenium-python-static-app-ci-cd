@@ -28,7 +28,6 @@ def driver():
 
     try:
         chrome_options = ChromeOptions()
-        chrome_options.binary_location = "/opt/hostedtoolcache/setup-chrome/chromium/1382795/x64/chrome"
         chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
 
         driver = webdriver.Chrome(
