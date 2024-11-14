@@ -3,10 +3,10 @@ name: Deploy and Run Tests
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 jobs:
@@ -31,15 +31,23 @@ jobs:
         pip install -r requirements.txt
     
     - name: Check Chrome version
-      run: google-chrome --version
-    
-    - name: Install ChromeDriver
+      id: chrome_version
       run: |
         CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
-        CHROME_DRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
-        wget https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip
-        unzip chromedriver_linux64.zip
-        sudo mv chromedriver /usr/local/bin
+        echo "Chrome version: $CHROME_VERSION"
+        echo "CHROME_VERSION=$CHROME_VERSION" >> $GITHUB_ENV
+
+    - name: Install ChromeDriver
+      run: |
+        CHROME_DRIVER_VERSION=$(curl -sS "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${{ env.CHROME_VERSION }}" || echo "")
+        if [ -z "$CHROME_DRIVER_VERSION" ]; then
+          echo "Using the latest ChromeDriver version"
+          CHROME_DRIVER_VERSION=$(curl -sS "https://chromedriver.storage.googleapis.com/LATEST_RELEASE")
+        fi
+        echo "Downloading ChromeDriver version $CHROME_DRIVER_VERSION"
+        wget -q "https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip"
+        unzip chromedriver_linux64.zip -d /usr/local/bin/
+        rm chromedriver_linux64.zip
 
     - name: Verify Python version
       run: python --version
