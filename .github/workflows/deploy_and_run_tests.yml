@@ -13,7 +13,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      BASEURL: ${{ secrets.BASEURL }}  # Set your environment URL as secret
+      BASEURL: ${{ secrets.BASE_URL }}  # Set your environment URL as secret
 
     steps:
     - name: Checkout code
@@ -29,9 +29,6 @@ jobs:
         python -m venv .venv
         source .venv/bin/activate
         pip install -r requirements.txt
-      
-    - name: Remove older Chrome from PATH
-      run: sudo rm /usr/bin/google-chrome
 
     - name: Set up Chrome and ChromeDriver
       uses: browser-actions/setup-chrome@v1
@@ -59,9 +56,10 @@ jobs:
         pytest --version
 
     - name: Wait for Render deployment to complete (2 minutes)
-      run: sleep 120
+      run: sleep 60
 
     - name: Run Selenium tests
       run: |
         source .venv/bin/activate
+        echo "Testing URL: $BASE_URL"
         pytest tests/selenium_script.py --maxfail=1 --disable-warnings -v
