@@ -13,9 +13,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      BASEURL: ${{ vars.BASE_URL }}  # Set your environment URL as secret
-        echo "Base url $BASE_URL"
-
+      BASE_URL: ${{ vars.BASE_URL }}  # Set your environment URL as a variable
     steps:
     - name: Checkout code
       uses: actions/checkout@v3  
@@ -65,5 +63,5 @@ jobs:
     - name: Run Selenium tests
       run: |
         source .venv/bin/activate
-        echo "Testing URL: $BASE_URL"
+        echo "Testing Base URL: $BASE_URL"  # Correct variable name
         pytest tests/selenium_script.py --maxfail=1 --disable-warnings -v
