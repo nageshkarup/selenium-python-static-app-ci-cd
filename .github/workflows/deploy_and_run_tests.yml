@@ -30,7 +30,7 @@ jobs:
         source .venv/bin/activate
         pip install -r requirements.txt
     
-        - name: Check Chrome version and download matching ChromeDriver
+    - name: Check Chrome version and download matching ChromeDriver
       run: |
         # Extract Chrome version
         CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
@@ -46,8 +46,6 @@ jobs:
         # Unzip and set up ChromeDriver
         unzip chromedriver_linux64.zip -d /usr/local/bin/
         rm chromedriver_linux64.zip
-
-
 
     - name: Verify Python version
       run: python --version
