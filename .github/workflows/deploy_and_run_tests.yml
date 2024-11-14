@@ -30,23 +30,17 @@ jobs:
         source .venv/bin/activate
         pip install -r requirements.txt
     
-    - name: Check Chrome version
-      id: chrome_version
+    - name: Check Chrome version and download matching ChromeDriver
       run: |
+        # Extract Chrome version
         CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
-        echo "Chrome version: $CHROME_VERSION"
-        echo "CHROME_VERSION=$CHROME_VERSION" >> $GITHUB_ENV
+        echo "Detected Chrome version: $CHROME_VERSION"
+        
+        # Set the download URL for ChromeDriver based on new URL structure
+        CHROME_DRIVER_URL="https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chromedriver-linux64.zip"
 
-    - name: Install ChromeDriver
-      run: |
-        CHROME_DRIVER_VERSION=$(curl -sS "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${{ env.CHROME_VERSION }}" || echo "")
-        if [ -z "$CHROME_DRIVER_VERSION" ]; then
-          echo "No exact ChromeDriver match found for Chrome version $CHROME_VERSION."
-          echo "Using the latest available ChromeDriver version instead."
-          CHROME_DRIVER_VERSION=$(curl -sS "https://chromedriver.storage.googleapis.com/LATEST_RELEASE")
-        fi
-        echo "Downloading ChromeDriver version $CHROME_DRIVER_VERSION"
-        wget -q "https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip"
+        # Download and install ChromeDriver
+        wget -q "$CHROME_DRIVER_URL" -O chromedriver_linux64.zip
         unzip chromedriver_linux64.zip -d /usr/local/bin/
         rm chromedriver_linux64.zip
 
