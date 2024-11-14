@@ -58,8 +58,8 @@ jobs:
         source .venv/bin/activate
         pytest --version
 
-    # - name: Wait for Render deployment to complete (2 minutes)
-    #   run: sleep 120
+    - name: Wait for Render deployment to complete (2 minutes)
+      run: sleep 120
 
     - name: Run Selenium tests
       run: |
