@@ -29,9 +29,6 @@ jobs:
         python -m venv .venv
         source .venv/bin/activate
         pip install -r requirements.txt
-    
-    - name: Remove existing Chrome
-      run: sudo apt-get remove google-chrome-stable -y
 
     - name: Set up Chrome and ChromeDriver
       uses: browser-actions/setup-chrome@v1
@@ -58,8 +55,8 @@ jobs:
         source .venv/bin/activate
         pytest --version
 
-    - name: Wait for Render deployment to complete (2 minutes)
-      run: sleep 120
+    # - name: Wait for Render deployment to complete (2 minutes)
+    #   run: sleep 120
 
     - name: Run Selenium tests
       run: |

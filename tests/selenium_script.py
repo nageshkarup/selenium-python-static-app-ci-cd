@@ -1,4 +1,5 @@
 import os
+import tempfile
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -20,8 +21,14 @@ LOCATORS = {
 # Function to initialize the driver
 @pytest.fixture(scope="module", autouse=True)
 def driver():
-    # Initialize WebDriver
-    driver = webdriver.Chrome()
+    
+    chrome_options = webdriver.ChromeOptions()
+     # Create a temporary directory for user data
+    user_data_dir = tempfile.mkdtemp()
+    chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
+    
+    driver = webdriver.Chrome(options=chrome_options)
+    
     driver.maximize_window()
     yield driver
     driver.quit()
