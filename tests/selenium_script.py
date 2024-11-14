@@ -23,21 +23,13 @@ LOCATORS = {
 @pytest.fixture(scope="module", autouse=True)
 def driver():
 
-    # Create a temporary directory for the user data
-    user_data_dir = tempfile.mkdtemp()
+    chrome_options = ChromeOptions()
+    chrome_options.add_argument("--no-first-run")
 
-    try:
-        chrome_options = ChromeOptions()
-        chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
-
-        driver = webdriver.Chrome(
-            options=chrome_options
-        )
-        driver.maximize_window()
-
-    finally:
-        # Ensure the directory is removed after the session
-        shutil.rmtree(user_data_dir)
+    driver = webdriver.Chrome(
+        options=chrome_options
+    )
+    driver.maximize_window()
 
     yield driver
     driver.quit()
