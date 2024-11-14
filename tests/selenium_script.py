@@ -32,7 +32,6 @@ def driver():
         chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
 
         driver = webdriver.Chrome(
-            executable_path="/opt/hostedtoolcache/setup-chrome/chromedriver/1382795/x64/chromedriver",
             options=chrome_options
         )
         driver.maximize_window()
