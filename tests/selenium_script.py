@@ -24,7 +24,8 @@ LOCATORS = {
 def driver():
 
     chrome_options = ChromeOptions()
-    chrome_options.add_argument("--no-first-run")
+    chrome_options.add_argument("--incognito")
+    chrome_options.add_argument("--headless=new")
 
     driver = webdriver.Chrome(
         options=chrome_options
