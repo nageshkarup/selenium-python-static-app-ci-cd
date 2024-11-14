@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -22,15 +23,24 @@ LOCATORS = {
 @pytest.fixture(scope="module", autouse=True)
 def driver():
 
-    # chrome_options = ChromeOptions()
-     # Create a temporary directory for user data
-    # user_data_dir = tempfile.mkdtemp()
-    # chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
-    # chrome_options.binary_location = "/opt/hostedtoolcache/setup-chrome/chromium/1382795/x64/chrome"
-    
-    driver = webdriver.Chrome()
-    
-    driver.maximize_window()
+    # Create a temporary directory for the user data
+    user_data_dir = tempfile.mkdtemp()
+
+    try:
+        chrome_options = ChromeOptions()
+        chrome_options.binary_location = "/opt/hostedtoolcache/setup-chrome/chromium/1382795/x64/chrome"
+        chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
+
+        driver = webdriver.Chrome(
+            executable_path="/opt/hostedtoolcache/setup-chrome/chromedriver/1382795/x64/chromedriver",
+            options=chrome_options
+        )
+        driver.maximize_window()
+
+    finally:
+        # Ensure the directory is removed after the session
+        shutil.rmtree(user_data_dir)
+
     yield driver
     driver.quit()
 
