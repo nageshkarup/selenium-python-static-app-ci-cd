@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pytest
-
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 
 BASE_URL = os.getenv("BASE_URL", "http://localhost:8000/static")
 
@@ -21,8 +21,8 @@ LOCATORS = {
 # Function to initialize the driver
 @pytest.fixture(scope="module", autouse=True)
 def driver():
-    
-    chrome_options = webdriver.ChromeOptions()
+
+    chrome_options = ChromeOptions()
      # Create a temporary directory for user data
     user_data_dir = tempfile.mkdtemp()
     chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
