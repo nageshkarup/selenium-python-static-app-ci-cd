@@ -35,17 +35,6 @@ jobs:
         # Extract Chrome version
         CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
         echo "Detected Chrome version: $CHROME_VERSION"
-        
-        # Attempt to download ChromeDriver for the detected version, fall back to the latest version if not found
-        CHROME_DRIVER_URL="https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip"
-        wget -q "$CHROME_DRIVER_URL" -O chromedriver_linux64.zip || {
-          echo "Specific ChromeDriver version not found, falling back to the latest release."
-          wget -q "https://chromedriver.storage.googleapis.com/LATEST_RELEASE/chromedriver_linux64.zip" -O chromedriver_linux64.zip
-        }
-        
-        # Unzip and set up ChromeDriver
-        unzip chromedriver_linux64.zip -d /usr/local/bin/
-        rm chromedriver_linux64.zip
 
     - name: Verify Python version
       run: python --version
