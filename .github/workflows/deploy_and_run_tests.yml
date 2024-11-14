@@ -41,7 +41,8 @@ jobs:
       run: |
         CHROME_DRIVER_VERSION=$(curl -sS "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${{ env.CHROME_VERSION }}" || echo "")
         if [ -z "$CHROME_DRIVER_VERSION" ]; then
-          echo "Using the latest ChromeDriver version"
+          echo "No exact ChromeDriver match found for Chrome version $CHROME_VERSION."
+          echo "Using the latest available ChromeDriver version instead."
           CHROME_DRIVER_VERSION=$(curl -sS "https://chromedriver.storage.googleapis.com/LATEST_RELEASE")
         fi
         echo "Downloading ChromeDriver version $CHROME_DRIVER_VERSION"
