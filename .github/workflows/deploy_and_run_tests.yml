@@ -32,17 +32,16 @@ jobs:
     
     - name: Check Chrome version and download matching ChromeDriver
       run: |
-        # Extract Chrome version
         CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
         echo "Detected Chrome version: $CHROME_VERSION"
         
-        # Set the download URL for ChromeDriver based on new URL structure
-        CHROME_DRIVER_URL="https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chromedriver-linux64.zip"
-
-        # Download and install ChromeDriver
-        wget -q "$CHROME_DRIVER_URL" -O chromedriver_linux64.zip
+        CHROME_DRIVER_URL="https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip"
+        wget -q "$CHROME_DRIVER_URL" -O chromedriver_linux64.zip || \
+        wget -q "https://chromedriver.storage.googleapis.com/LATEST_RELEASE/chromedriver_linux64.zip" -O chromedriver_linux64.zip
+        
         unzip chromedriver_linux64.zip -d /usr/local/bin/
         rm chromedriver_linux64.zip
+
 
     - name: Verify Python version
       run: python --version
