@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BASEURL: ${{ vars.BASE_URL }}  # Set your environment URL as secret
-      echo "Base url $BASE_URL"
+        echo "Base url $BASE_URL"
 
     steps:
     - name: Checkout code
