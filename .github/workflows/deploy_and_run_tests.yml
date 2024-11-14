@@ -17,10 +17,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3  # Updated version
+      uses: actions/checkout@v3  
 
     - name: Set up Python
-      uses: actions/setup-python@v3  # Updated version
+      uses: actions/setup-python@v3  
       with:
         python-version: '3.x'
 
@@ -29,6 +29,17 @@ jobs:
         python -m venv .venv
         source .venv/bin/activate
         pip install -r requirements.txt
+    
+    - name: Check Chrome version
+      run: google-chrome --version
+    
+    - name: Install ChromeDriver
+      run: |
+        CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
+        CHROME_DRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
+        wget https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip
+        unzip chromedriver_linux64.zip
+        sudo mv chromedriver /usr/local/bin
 
     - name: Verify Python version
       run: python --version
