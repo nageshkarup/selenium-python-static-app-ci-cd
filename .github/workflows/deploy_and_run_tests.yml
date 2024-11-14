@@ -13,7 +13,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      BASEURL: ${{ secrets.BASE_URL }}  # Set your environment URL as secret
+      BASEURL: ${{ vars.BASE_URL }}  # Set your environment URL as secret
+      echo "Base url $BASE_URL"
 
     steps:
     - name: Checkout code
