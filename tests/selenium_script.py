@@ -26,6 +26,7 @@ def driver():
      # Create a temporary directory for user data
     user_data_dir = tempfile.mkdtemp()
     chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
+    chrome_options.binary_location = "/opt/hostedtoolcache/setup-chrome/chromium/1382795/x64/chrome"
     
     driver = webdriver.Chrome(options=chrome_options)
     
