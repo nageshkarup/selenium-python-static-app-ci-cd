@@ -31,7 +31,7 @@ jobs:
         pip install -r requirements.txt
       
     - name: Remove older Chrome from PATH
-    run: sudo rm /usr/bin/google-chrome
+      run: sudo rm /usr/bin/google-chrome
 
     - name: Set up Chrome and ChromeDriver
       uses: browser-actions/setup-chrome@v1
