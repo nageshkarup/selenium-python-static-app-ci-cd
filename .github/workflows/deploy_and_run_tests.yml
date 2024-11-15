@@ -1,4 +1,4 @@
-name: Deploy and Run Tests
+name: Deploy and Run Tests Locally
 
 on:
   push:
@@ -12,8 +12,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      BASE_URL: ${{ vars.BASE_URL }}  # Set your environment URL as a variable
     steps:
     - name: Checkout code
       uses: actions/checkout@v3  
@@ -28,40 +26,18 @@ jobs:
         python -m venv .venv
         source .venv/bin/activate
         pip install -r requirements.txt
-      
+
     - name: Remove older Chrome from PATH
       run: sudo rm /usr/bin/google-chrome
 
     - name: Set up Chrome and ChromeDriver
       uses: browser-actions/setup-chrome@v1
       with:
-        chrome-version: latest  # Install the latest Chrome version
-        install-chromedriver: true  # Automatically installs compatible ChromeDriver
+        chrome-version: latest
+        install-chromedriver: true
 
-    - name: Verify Python version
-      run: python --version
+    - name: Make script executable
+      run: chmod +x run_tests.sh
 
-    - name: Verify pip and installed packages
-      run: |
-        pip --version
-        pip list
-
-    - name: Verify virtual environment
-      run: |
-        source .venv/bin/activate
-        which python
-        which pip
-
-    - name: Check if pytest is installed
-      run: |
-        source .venv/bin/activate
-        pytest --version
-
-    - name: Wait for Render deployment to complete (2 minutes)
-      run: sleep 60
-
-    - name: Run Selenium tests
-      run: |
-        source .venv/bin/activate
-        echo "Testing Base URL: $BASE_URL"  # Correct variable name
-        pytest tests/selenium_script.py --maxfail=1 --disable-warnings -v
+    - name: Run tests using script
+      run: ./run_tests.sh
