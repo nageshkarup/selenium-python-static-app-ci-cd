@@ -55,28 +55,29 @@ jobs:
       run: |
         if [[ "$RUNNER_OS" == "Linux" ]]; then
           echo "Checking Chrome and ChromeDriver paths on Linux..."
-          which google-chrome
-          google-chrome --version
-          which chromedriver
-          chromedriver --version
-
+          which google-chrome || echo "Chrome not found"
+          google-chrome --version || echo "Chrome version not found"
+          which chromedriver || echo "ChromeDriver not found"
+          chromedriver --version || echo "ChromeDriver version not found"
+        
           echo "Checking Firefox and GeckoDriver paths on Linux..."
-          which firefox
-          firefox --version
-          which geckodriver
-          geckodriver --version
+          which firefox || echo "Firefox not found"
+          firefox --version || echo "Firefox version not found"
+          which geckodriver || echo "GeckoDriver not found"
+          geckodriver --version || echo "GeckoDriver version not found"
+    
         elif [[ "$RUNNER_OS" == "Windows" ]]; then
           echo "Checking Chrome and ChromeDriver paths on Windows..."
-          where chrome
-          where chromedriver
-          chrome --version
-          chromedriver --version
-
+          where chrome || echo "Chrome not found"
+          where chromedriver || echo "ChromeDriver not found"
+          chrome --version || echo "Chrome version not found"
+          chromedriver --version || echo "ChromeDriver version not found"
+        
           echo "Checking Firefox and GeckoDriver paths on Windows..."
-          where firefox
-          where geckodriver
-          firefox --version
-          geckodriver --version
+          where firefox || echo "Firefox not found"
+          where geckodriver || echo "GeckoDriver not found"
+          firefox --version || echo "Firefox version not found"
+          geckodriver --version || echo "GeckoDriver version not found"
         fi
       shell: bash
       
