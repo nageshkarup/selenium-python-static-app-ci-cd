@@ -35,7 +35,7 @@ def driver():
         driver = webdriver.Firefox(options=firefox_options)
     else:
         raise ValueError(f"Unsupported browser: {BROWSER_NAME}")
-
+    print(f"Starting {BROWSER_NAME} browser...")
     driver.maximize_window()
 
     yield driver
