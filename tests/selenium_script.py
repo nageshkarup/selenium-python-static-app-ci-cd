@@ -7,8 +7,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pytest
 from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 BASE_URL = os.getenv("BASE_URL", "http://localhost:8000/static")
+BROWSER_NAME = os.getenv("BROWSER_NAME", "chrome").lower()
 
 # Define locators
 LOCATORS = {
@@ -22,14 +24,18 @@ LOCATORS = {
 # Function to initialize the driver
 @pytest.fixture(scope="module", autouse=True)
 def driver():
+    if BROWSER_NAME == "chrome":
+        chrome_options = ChromeOptions()
+        chrome_options.add_argument("--incognito")
+        chrome_options.add_argument("--headless=new")
+        driver = webdriver.Chrome(options=chrome_options)
+    elif BROWSER_NAME == "firefox":
+        firefox_options = FirefoxOptions()
+        firefox_options.add_argument("--headless")  # Running Firefox in headless mode
+        driver = webdriver.Firefox(options=firefox_options)
+    else:
+        raise ValueError(f"Unsupported browser: {BROWSER_NAME}")
 
-    chrome_options = ChromeOptions()
-    chrome_options.add_argument("--incognito")
-    chrome_options.add_argument("--headless=new")
-
-    driver = webdriver.Chrome(
-        options=chrome_options
-    )
     driver.maximize_window()
 
     yield driver
