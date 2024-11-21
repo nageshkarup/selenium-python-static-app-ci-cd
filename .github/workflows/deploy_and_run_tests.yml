@@ -24,7 +24,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3  
-      
+
     - name: Set up Python (Linux)
       if: runner.os == 'Linux'
       uses: actions/setup-python@v3  
@@ -69,9 +69,10 @@ jobs:
         elif [[ "$RUNNER_OS" == "Windows" ]]; then
           echo "Checking Chrome and ChromeDriver paths on Windows..."
           where chrome || echo "Chrome not found, checking default install path"
+          echo "Attempting to retrieve Chrome version on Windows..."
           if [ -f "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" ]; then
             echo "Chrome found at default path"
-            "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" --version
+            powershell -Command "(Get-Item 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe').VersionInfo.ProductVersion"
           else
             echo "Chrome not found at default path"
           fi
@@ -81,9 +82,10 @@ jobs:
         
           echo "Checking Firefox and GeckoDriver paths on Windows..."
           where firefox || echo "Firefox not found, checking default install path"
+          echo "Attempting to retrieve Firefox version on Windows..."
           if [ -f "C:\\Program Files\\Mozilla Firefox\\firefox.exe" ]; then
             echo "Firefox found at default path"
-            "C:\\Program Files\\Mozilla Firefox\\firefox.exe" --version
+            powershell -Command "(Get-Item 'C:\\Program Files\\Mozilla Firefox\\firefox.exe').VersionInfo.ProductVersion"
           else
             echo "Firefox not found at default path"
           fi
