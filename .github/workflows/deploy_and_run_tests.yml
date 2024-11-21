@@ -24,16 +24,31 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3  
-
-    - name: Set up Python
+      
+    - name: Set up Python (Linux)
+      if: runner.os == 'Linux'
       uses: actions/setup-python@v3  
       with:
         python-version: '3.x'
 
-    - name: Install dependencies
+    - name: Set up Python (Windows)
+      if: runner.os == 'Windows'
+      uses: actions/setup-python@v3  
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies (Linux)
+      if: runner.os == 'Linux'
       run: |
         python -m venv .venv
         source .venv/bin/activate
+        pip install -r requirements.txt
+
+    - name: Install dependencies (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        python -m venv .venv
+        .\\.venv\\Scripts\\activate
         pip install -r requirements.txt
     
     - name: Verify Browser and Driver Paths
