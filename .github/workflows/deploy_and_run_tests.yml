@@ -33,6 +33,13 @@ jobs:
         google-chrome --version
         echo "ChromeDriver is located at: $(which chromedriver)"
         chromedriver --version
+    
+    - name: Verify Firefox and GeckoDriver paths
+      run: |
+        echo "Firefox is located at: $(which firefox)"
+        firefox --version
+        echo "GeckoDriver is located at: $(which geckodriver)"
+        geckodriver --version
 
     - name: Make script executable
       run: chmod +x run_tests.sh
