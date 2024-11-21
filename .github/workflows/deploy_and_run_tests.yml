@@ -1,4 +1,4 @@
-name: Deploy and Run Tests Locally
+name: Deploy and Run Cross-Browser Tests Locally
 
 on:
   push:
@@ -12,6 +12,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        browser: [chrome, firefox]  # Add more browsers if needed
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3  
@@ -27,17 +31,27 @@ jobs:
         source .venv/bin/activate
         pip install -r requirements.txt
 
-    - name: Remove older Chrome from PATH
-      run: sudo rm /usr/bin/google-chrome
-
-    - name: Set up Chrome and ChromeDriver
-      uses: browser-actions/setup-chrome@v1
-      with:
-        chrome-version: latest
-        install-chromedriver: true
+    - name: Set up WebDriver for Pre-Installed Browsers
+      run: |
+        if [[ "${{ matrix.browser }}" == "chrome" ]]; then
+          # Use pre-installed Chrome and set up ChromeDriver
+          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' | cut -d '.' -f 1)
+          LATEST_DRIVER=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}")
+          wget -q "https://chromedriver.storage.googleapis.com/${LATEST_DRIVER}/chromedriver_linux64.zip"
+          unzip chromedriver_linux64.zip -d /usr/local/bin/
+          echo "ChromeDriver installed for Chrome version $CHROME_VERSION"
+        elif [[ "${{ matrix.browser }}" == "firefox" ]]; then
+          # Use pre-installed Firefox and set up GeckoDriver
+          FIREFOX_VERSION=$(firefox --version | grep -oP '\d+\.\d+')
+          wget -q "https://github.com/mozilla/geckodriver/releases/latest/download/geckodriver-v0.33.0-linux64.tar.gz"
+          tar -xzf geckodriver-v0.33.0-linux64.tar.gz -C /usr/local/bin/
+          echo "GeckoDriver installed for Firefox version $FIREFOX_VERSION"
+        fi
 
     - name: Make script executable
       run: chmod +x run_tests.sh
 
     - name: Run tests using script
+      env:
+        BROWSER: ${{ matrix.browser }}  # Pass the browser to the script
       run: ./run_tests.sh
