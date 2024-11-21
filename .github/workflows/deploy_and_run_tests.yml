@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        browser: [chrome]
+        browser: [chrome, firefox]
         os: [windows-latest]
 
     env:
@@ -50,7 +50,7 @@ jobs:
         python -m venv .venv
         .\\.venv\\Scripts\\activate
         pip install -r requirements.txt
-    
+
     - name: Verify Browser and Driver Paths
       run: |
         if [[ "$RUNNER_OS" == "Linux" ]]; then
@@ -68,15 +68,27 @@ jobs:
     
         elif [[ "$RUNNER_OS" == "Windows" ]]; then
           echo "Checking Chrome and ChromeDriver paths on Windows..."
-          where chrome || echo "Chrome not found"
+          where chrome || echo "Chrome not found, checking default install path"
+          if [ -f "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" ]; then
+            echo "Chrome found at default path"
+            "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" --version
+          else
+            echo "Chrome not found at default path"
+          fi
+    
           where chromedriver || echo "ChromeDriver not found"
-          chrome --version || echo "Chrome version not found"
           chromedriver --version || echo "ChromeDriver version not found"
         
           echo "Checking Firefox and GeckoDriver paths on Windows..."
-          where firefox || echo "Firefox not found"
+          where firefox || echo "Firefox not found, checking default install path"
+          if [ -f "C:\\Program Files\\Mozilla Firefox\\firefox.exe" ]; then
+            echo "Firefox found at default path"
+            "C:\\Program Files\\Mozilla Firefox\\firefox.exe" --version
+          else
+            echo "Firefox not found at default path"
+          fi
+    
           where geckodriver || echo "GeckoDriver not found"
-          firefox --version || echo "Firefox version not found"
           geckodriver --version || echo "GeckoDriver version not found"
         fi
       shell: bash
