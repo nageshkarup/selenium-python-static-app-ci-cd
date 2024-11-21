@@ -34,12 +34,6 @@ jobs:
         echo "ChromeDriver is located at: $(which chromedriver)"
         chromedriver --version
 
-    - name: Set up Chrome and ChromeDriver
-      uses: browser-actions/setup-chrome@v1
-      with:
-        chrome-version: latest
-        install-chromedriver: true
-
     - name: Make script executable
       run: chmod +x run_tests.sh
 
