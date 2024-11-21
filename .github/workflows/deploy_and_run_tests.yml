@@ -11,7 +11,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
@@ -65,8 +65,15 @@ jobs:
         fi
       shell: bash
       
-    - name: Make script executable
+    - name: Make script executable (Linux only)
+      if: runner.os == 'Linux'
       run: chmod +x run_tests.sh
 
-    - name: Run tests using script
+    - name: Run tests using script (Linux)
+      if: runner.os == 'Linux'
       run: ./run_tests.sh
+
+    - name: Run tests using script (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        .\\run_tests.bat
