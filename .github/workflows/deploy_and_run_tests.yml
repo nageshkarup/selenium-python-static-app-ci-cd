@@ -16,6 +16,7 @@ jobs:
     strategy:
       matrix:
         browser: [chrome, firefox]
+        os: [ubuntu-latest, windows-latest]
 
     env:
       BROWSER_NAME: ${{ matrix.browser }}
@@ -34,21 +35,36 @@ jobs:
         python -m venv .venv
         source .venv/bin/activate
         pip install -r requirements.txt
-
-    - name: Verify Chrome and ChromeDriver paths
-      run: |
-        echo "Chrome is located at: $(which google-chrome)"
-        google-chrome --version
-        echo "ChromeDriver is located at: $(which chromedriver)"
-        chromedriver --version
     
-    - name: Verify Firefox and GeckoDriver paths
+    - name: Verify Browser and Driver Paths
       run: |
-        echo "Firefox is located at: $(which firefox)"
-        firefox --version
-        echo "GeckoDriver is located at: $(which geckodriver)"
-        geckodriver --version
+        if [[ "$RUNNER_OS" == "Linux" ]]; then
+          echo "Checking Chrome and ChromeDriver paths on Linux..."
+          which google-chrome
+          google-chrome --version
+          which chromedriver
+          chromedriver --version
 
+          echo "Checking Firefox and GeckoDriver paths on Linux..."
+          which firefox
+          firefox --version
+          which geckodriver
+          geckodriver --version
+        elif [[ "$RUNNER_OS" == "Windows" ]]; then
+          echo "Checking Chrome and ChromeDriver paths on Windows..."
+          where chrome
+          where chromedriver
+          chrome --version
+          chromedriver --version
+
+          echo "Checking Firefox and GeckoDriver paths on Windows..."
+          where firefox
+          where geckodriver
+          firefox --version
+          geckodriver --version
+        fi
+      shell: bash
+      
     - name: Make script executable
       run: chmod +x run_tests.sh
 
