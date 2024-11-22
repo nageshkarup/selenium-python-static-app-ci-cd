@@ -10,7 +10,7 @@ SERVER_PID=$!
 # Give the server a moment to start
 sleep 3
 
-pytest tests/selenium_script.py --count=5 -n=10
+pytest tests/selenium_script.py --count=15 -n=15
 
 # Kill the server after tests are done
 kill $SERVER_PID
